@@ -28,8 +28,11 @@
 
   <h2>🔌 Personal Electricity Footprint (Egypt, No A/C)</h2>
 
-  <label>Total home electricity bill (kWh/month):</label>
-  <input type="number" id="totalKWh" placeholder="e.g. 360">
+  <label>Total home electricity bill (LE/month):</label>
+  <input type="number" id="billLE" placeholder="e.g. 360">
+
+  <label>Total home electricity (kWh/month):</label>
+  <input type="number" id="kwhOutput" placeholder="Auto-calculated" readonly>
 
   <label>Number of people in the home:</label>
   <input type="number" id="numPeople" placeholder="e.g. 3">
@@ -40,14 +43,18 @@
 
   <script>
     function calculateFootprint() {
-      const totalKWh = parseFloat(document.getElementById("totalKWh").value);
+      const billLE = parseFloat(document.getElementById("billLE").value);
       const numPeople = parseFloat(document.getElementById("numPeople").value);
+      const rateLEperKWh = 1.25;
       const reference = 120;
 
-      if (isNaN(totalKWh) || isNaN(numPeople) || numPeople <= 0) {
+      if (isNaN(billLE) || isNaN(numPeople) || numPeople <= 0) {
         document.getElementById("output").innerHTML = "⚠️ Please enter valid numbers.";
         return;
       }
+
+      const totalKWh = billLE / rateLEperKWh;
+      document.getElementById("kwhOutput").value = totalKWh.toFixed(1);
 
       const personalKWh = totalKWh / numPeople;
       let status = "";
@@ -59,6 +66,7 @@
       }
 
       document.getElementById("output").innerHTML = `
+        Total Home Usage: <strong>${totalKWh.toFixed(1)} kWh/month</strong><br>
         Your usage: <strong>${personalKWh.toFixed(1)} kWh/month/person</strong><br>
         Reference (no A/C): <strong>${reference} kWh/month/person</strong><br>
         ${status}
