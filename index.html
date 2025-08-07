@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily ELECTRICAL Calculator - AMOC - MOHAMED ABD ELSALAM</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔌 Personal Electricity Footprint (Egypt, No A/C)</h2>
+
+  <label>Total home electricity bill (kWh/month):</label>
+  <input type="number" id="totalKWh" placeholder="e.g. 360">
+
+  <label>Number of people in the home:</label>
+  <input type="number" id="numPeople" placeholder="e.g. 3">
+
+  <button onclick="calculateFootprint()">Calculate</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculateFootprint() {
+      const totalKWh = parseFloat(document.getElementById("totalKWh").value);
+      const numPeople = parseFloat(document.getElementById("numPeople").value);
+      const reference = 120;
+
+      if (isNaN(totalKWh) || isNaN(numPeople) || numPeople <= 0) {
+        document.getElementById("output").innerHTML = "⚠️ Please enter valid numbers.";
+        return;
+      }
+
+      const personalKWh = totalKWh / numPeople;
+      let status = "";
+
+      if (personalKWh <= reference) {
+        status = `✅ Within typical range.`;
+      } else {
+        status = `⚠️ Above typical range by ${(personalKWh - reference).toFixed(1)} kWh.`;
+      }
+
+      document.getElementById("output").innerHTML = `
+        Your usage: <strong>${personalKWh.toFixed(1)} kWh/month/person</strong><br>
+        Reference (no A/C): <strong>${reference} kWh/month/person</strong><br>
+        ${status}
+      `;
+    }
+  </script>
+
+</body>
+</html>
